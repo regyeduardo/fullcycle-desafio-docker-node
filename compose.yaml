@@ -11,17 +11,19 @@ services:
       # - ./entrypoint.sql:/docker-entrypoint-initdb.d/init.sql:rw
     container_name: fullcycle_desafio_db
     networks:
-      - batata
+      - fullcycle_desafio_network
   app:
-    build: .
-    ports:
-      - "5555:3000"
+    image: node
     container_name: fullcycle_desafio_node_app
     depends_on:
       - db
     networks:
-      - batata
+      - fullcycle_desafio_network
     restart: on-failure:10
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    entrypoint: ["bash", "-c", "/app/init.sh"]
   web:
     build: ./nginx
     ports:
@@ -30,11 +32,12 @@ services:
     depends_on:
       - app
     networks:
-      - batata
+      - fullcycle_desafio_network
     environment:
       - NGINX_PORT=80
 volumes:
   mysql:
+  app:
 networks:
-  batata:
-    name: batata
+  fullcycle_desafio_network:
+    name: fullcycle_desafio_network
