@@ -1,14 +1,14 @@
 services:
   db:
-    image: mysql
+    build: ./db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: main
     ports:
       - "1234:3306"
     volumes:
-      - mysql:/var/lib/mysql:rw
-      # - ./entrypoint.sql:/docker-entrypoint-initdb.d/init.sql:rw
+      - ./mysql:/var/lib/mysql:rw
     container_name: fullcycle_desafio_db
     networks:
       - fullcycle_desafio_network

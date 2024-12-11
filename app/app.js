@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const waitOn = require('wait-on');
 
 const mysql = require("mysql2");
 const connection = mysql.createConnection({
@@ -10,10 +11,23 @@ const connection = mysql.createConnection({
   database: "main",
 });
 
+const opts = {
+  resources: [
+    'db:3306',
+  ],
+};
+
 app.use(express.json());
-connection.connect(function (err) {
-  if (err) throw err;
-  console.log("Connected!");
+
+waitOn(opts, function (err) {
+  if (err) {
+    return handleError(err);
+  }
+
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+  });
 });
 
 app.get("/", (req, res) => {
@@ -46,3 +60,6 @@ app.post("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+
+
