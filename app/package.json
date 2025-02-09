@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "express": "^4.21.1",
-    "mysql2": "^3.11.5",
-    "wait-on": "^8.0.1"
+    "mysql2": "^3.11.5"
   }
 }
